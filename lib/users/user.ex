@@ -3,6 +3,10 @@ defmodule Flightex.Users.User do
   @enforce_keys @keys
   defstruct @keys
 
+  def build(_name, _email, cpf) when not is_binary(cpf) do
+    {:error, "Cpf must be a String"}
+  end
+
   def build(name, email, cpf) do
     response = %__MODULE__{
       name: name,
