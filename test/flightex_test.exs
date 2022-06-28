@@ -1,10 +1,28 @@
 defmodule FlightexTest do
   use ExUnit.Case, async: true
 
+  alias Flightex.Bookings.{Agent}
+
   setup do
     Flightex.start_agents()
 
     :ok
+  end
+
+  describe "create_or_update_booking/1" do
+    test "create booking" do
+      params = %{
+        complete_date: ~N[2021-03-22 19:29:25.607218],
+        local_origin: "Vitória",
+        local_destination: "Salvador",
+        user_id: "user_id1"
+      }
+
+      {:ok, uuid} = Flightex.create_or_update_booking(params)
+      {:ok, booking} = Agent.get(uuid)
+
+      assert params.user_id === booking.user_id
+    end
   end
 
   describe "generate_report/2" do
